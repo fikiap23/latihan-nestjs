@@ -6,4 +6,8 @@ export class TaskService {
   async create(createTaskDto: CreateTaskDto) {
     return createTaskDto;
   }
+
+  async findAll() {
+    return [];
+  }
 }
