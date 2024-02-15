@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/createTask.dto';
+import { dummyData } from './_mock/taskDummy';
 
 @Injectable()
 export class TaskService {
@@ -7,7 +8,7 @@ export class TaskService {
     return createTaskDto;
   }
 
-  async findAll() {
-    return [];
+  async findAll(): Promise<CreateTaskDto[]> {
+    return dummyData;
   }
 }
