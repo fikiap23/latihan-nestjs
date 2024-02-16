@@ -92,7 +92,7 @@ export class AuthService {
     });
   }
 
-  async getProfileById(id: number) {
+  async getUserById(id: number) {
     const user = await this.prismaService.users.findUnique({
       where: {
         id,
@@ -107,6 +107,10 @@ export class AuthService {
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-    return sendResponseApi(HttpStatus.OK, 'Success retrieve profile', user);
+    return sendResponseApi(
+      HttpStatus.OK,
+      'Success retrieve user details',
+      user,
+    );
   }
 }

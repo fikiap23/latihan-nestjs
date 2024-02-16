@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -29,8 +30,9 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard)
-  @Get('profile/:id')
-  getProfile(@Param('id', ParseIntPipe) id: number) {
-    return this.authService.getProfileById(id);
+  @Get('profile')
+  getProfile(@Req() req) {
+    // console.log(req.user);
+    return this.authService.getUserById(req.user.id);
   }
 }
