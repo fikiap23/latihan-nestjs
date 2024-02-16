@@ -91,4 +91,22 @@ export class AuthService {
       expiresIn: jwtConstants.expiresIn,
     });
   }
+
+  async getProfileById(id: number) {
+    const user = await this.prismaService.users.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        avatar: true,
+      },
+    });
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    return sendResponseApi(HttpStatus.OK, 'Success retrieve profile', user);
+  }
 }
