@@ -50,6 +50,7 @@ export class TaskController {
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.taskService.delete(id);
+    const deletedTask = await this.taskService.delete(id);
+    return sendResponseApi(HttpStatus.OK, 'Success delete task', deletedTask);
   }
 }
