@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
@@ -11,6 +12,7 @@ import {
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/createTask.dto';
 import { UpdateTaskDto } from './dto/updateTask.dto';
+import { sendResponseApi } from 'src/utils/sendResponseApi';
 
 @Controller('task')
 export class TaskController {
@@ -19,11 +21,10 @@ export class TaskController {
   @Post()
   async create(@Body() createTaskDto: CreateTaskDto) {
     const newTask = await this.taskService.create(createTaskDto);
-    return {
-      statusCode: 201,
-      message: 'Task created successfully',
-      data: newTask,
-    };
+    if (!newTask) {
+      return sendResponseApi(HttpStatus.BAD_REQUEST, 'Task not created');
+    }
+    return sendResponseApi(HttpStatus.CREATED, 'Task created', newTask);
   }
 
   @Get()

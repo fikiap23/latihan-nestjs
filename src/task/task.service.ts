@@ -10,7 +10,6 @@ export class TaskService {
   async create(createTaskDto: CreateTaskDto) {
     return this.prismaService.tasks.create({ data: createTaskDto });
   }
-
   async findAll(): Promise<CreateTaskDto[]> {
     return dummyData;
   }
