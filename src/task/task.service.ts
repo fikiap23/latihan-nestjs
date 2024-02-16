@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/createTask.dto';
-import { dummyData } from './_mock/taskDummy';
 import { UpdateTaskDto } from './dto/updateTask.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
