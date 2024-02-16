@@ -18,7 +18,12 @@ export class TaskController {
 
   @Post()
   async create(@Body() createTaskDto: CreateTaskDto) {
-    return await this.taskService.create(createTaskDto);
+    const newTask = await this.taskService.create(createTaskDto);
+    return {
+      statusCode: 201,
+      message: 'Task created successfully',
+      data: newTask,
+    };
   }
 
   @Get()
