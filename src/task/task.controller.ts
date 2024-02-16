@@ -29,7 +29,8 @@ export class TaskController {
 
   @Get()
   async findAll() {
-    return await this.taskService.findAll();
+    const tasks = await this.taskService.findAll();
+    return sendResponseApi(HttpStatus.OK, 'Success retrieve all tasks', tasks);
   }
 
   @Get(':id')
