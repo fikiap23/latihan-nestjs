@@ -44,11 +44,13 @@ export class TaskController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateTaskDto: UpdateTaskDto,
   ) {
-    return await this.taskService.update(id, updateTaskDto);
+    const updatedTask = await this.taskService.update(id, updateTaskDto);
+    return sendResponseApi(HttpStatus.OK, 'Success update task', updatedTask);
   }
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.taskService.delete(id);
+    const deletedTask = await this.taskService.delete(id);
+    return sendResponseApi(HttpStatus.OK, 'Success delete task');
   }
 }

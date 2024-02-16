@@ -19,17 +19,13 @@ export class TaskService {
   }
 
   async update(id: number, updateTaskDto: UpdateTaskDto) {
-    return updateTaskDto;
+    return this.prismaService.tasks.update({
+      where: { id },
+      data: updateTaskDto,
+    });
   }
 
   async delete(id: number) {
-    console.log(id);
-    const task = dummyData.find((task) => task.id === id);
-    console.log(task);
-    if (!task) {
-      throw new Error('Task not found');
-    }
-    dummyData.splice(dummyData.indexOf(task), 1);
-    return task;
+    return this.prismaService.tasks.delete({ where: { id } });
   }
 }
