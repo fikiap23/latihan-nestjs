@@ -35,7 +35,8 @@ export class TaskController {
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.taskService.findOne(id);
+    const task = await this.taskService.findOne(id);
+    return sendResponseApi(HttpStatus.OK, 'Success retrieve task', task);
   }
 
   @Patch(':id')
