@@ -113,4 +113,29 @@ export class AuthService {
       user,
     );
   }
+
+  async uploadAvatar(id: number, avatar) {
+    const checkUserExist = await this.prismaService.users.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!checkUserExist) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    const updateAvatar = await this.prismaService.users.update({
+      where: {
+        id,
+      },
+      data: {
+        avatar,
+      },
+    });
+    if (!updateAvatar) {
+      throw new HttpException('Avatar not updated', HttpStatus.BAD_REQUEST);
+    }
+    return sendResponseApi(HttpStatus.OK, 'Avatar updated successfully');
+  }
 }
