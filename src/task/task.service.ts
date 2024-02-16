@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/createTask.dto';
 import { dummyData } from './_mock/taskDummy';
 import { UpdateTaskDto } from './dto/updateTask.dto';
@@ -26,6 +26,10 @@ export class TaskService {
   }
 
   async delete(id: number) {
+    const task = await this.prismaService.tasks.findUnique({ where: { id } });
+    if (!task) {
+      throw new NotFoundException('Task not found');
+    }
     return this.prismaService.tasks.delete({ where: { id } });
   }
 }
