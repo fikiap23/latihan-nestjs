@@ -6,7 +6,17 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class TaskService {
   constructor(private readonly prismaService: PrismaService) {}
-  async create(createTaskDto: CreateTaskDto) {
+  async create(userId: number, createTaskDto: CreateTaskDto) {
+    if (!userId) {
+      throw new NotFoundException('Missing userId');
+    }
+    createTaskDto.userId = userId;
+
+    const checkUser = await this.findOne(createTaskDto.userId);
+    if (checkUser) {
+      throw new NotFoundException('Unauthorized');
+    }
+
     return this.prismaService.tasks.create({ data: createTaskDto });
   }
   async findAll(): Promise<CreateTaskDto[]> {
