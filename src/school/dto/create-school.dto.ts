@@ -1,1 +1,20 @@
-export class CreateSchoolDto {}
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+
+export class CreateSchoolDto {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @IsString()
+  @IsOptional()
+  address?: string;
+
+  @IsOptional()
+  @IsString()
+  phone?: string;
+}
