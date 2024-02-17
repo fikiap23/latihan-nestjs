@@ -24,7 +24,7 @@ export class TaskController {
   @UseGuards(AuthGuard)
   @Post()
   async create(@Body() createTaskDto: CreateTaskDto, @Req() req: any) {
-    const newTask = await this.taskService.create(req.user.id, createTaskDto);
+    const newTask = await this.taskService.create(createTaskDto);
     if (!newTask) {
       return sendResponseApi(HttpStatus.BAD_REQUEST, 'Task not created');
     }
