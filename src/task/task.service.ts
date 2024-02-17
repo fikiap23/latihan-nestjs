@@ -27,14 +27,31 @@ export class TaskService {
 
     return this.prismaService.tasks.create({ data: createTaskDto });
   }
-  async findAll(): Promise<CreateTaskDto[]> {
+  async findAll(): Promise<{ user: any; tasks: CreateTaskDto[] }> {
     const userId = this.req.user.id;
-    return this.prismaService.tasks.findMany({ where: { userId } });
+    const user = await this.prismaService.users.findUnique({
+      where: { id: userId },
+      select: { id: true, name: true, email: true, avatar: true },
+    });
+
+    const tasks = await this.prismaService.tasks.findMany({
+      where: { userId },
+    });
+
+    return {
+      user,
+      tasks,
+    };
   }
 
   async findOne(id: number): Promise<CreateTaskDto> {
     const userId = this.req.user.id;
-    return this.prismaService.tasks.findFirst({ where: { id, userId } });
+    return this.prismaService.tasks.findFirst({
+      where: { id, userId },
+      include: {
+        users: { select: { id: true, name: true, email: true, avatar: true } },
+      },
+    });
   }
 
   async update(id: number, updateTaskDto: UpdateTaskDto) {
