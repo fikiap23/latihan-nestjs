@@ -33,18 +33,23 @@ export class TaskService {
   }
 
   async findOne(id: number): Promise<CreateTaskDto> {
-    return this.prismaService.tasks.findUnique({ where: { id } });
+    const userId = this.req.user.id;
+    return this.prismaService.tasks.findFirst({ where: { id, userId } });
   }
 
   async update(id: number, updateTaskDto: UpdateTaskDto) {
+    const userId = this.req.user.id;
     return this.prismaService.tasks.update({
-      where: { id },
+      where: { id, userId },
       data: updateTaskDto,
     });
   }
 
   async delete(id: number) {
-    const task = await this.prismaService.tasks.findUnique({ where: { id } });
+    const userId = this.req.user.id;
+    const task = await this.prismaService.tasks.findUnique({
+      where: { id, userId },
+    });
     if (!task) {
       throw new NotFoundException('Task not found');
     }
