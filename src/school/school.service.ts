@@ -1,8 +1,13 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { UpdateSchoolDto } from './dto/update-school.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { sendResponseApi } from 'src/utils/sendResponseApi';
+import { PrismaService } from '../prisma/prisma.service';
+import { sendResponseApi } from '../utils/sendResponseApi';
 
 @Injectable()
 export class SchoolService {
@@ -12,15 +17,16 @@ export class SchoolService {
       data: createSchoolDto,
     });
     if (!newSchool) {
-      throw new HttpException('School not created', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException('School not created');
     }
     return sendResponseApi(HttpStatus.CREATED, 'School created', newSchool);
   }
 
   async findAll() {
     const schools = await this.prismaService.schools.findMany();
-    if (!schools) {
-      throw new HttpException('School not found', HttpStatus.NOT_FOUND);
+    // console.log(schools);
+    if (!schools || schools.length === 0) {
+      throw new NotFoundException('School not found');
     }
     return sendResponseApi(
       HttpStatus.OK,
@@ -34,7 +40,7 @@ export class SchoolService {
       where: { id },
     });
     if (!school) {
-      throw new HttpException('School not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('School not found');
     }
     return sendResponseApi(HttpStatus.OK, 'Success retrieve school', school);
   }
@@ -45,7 +51,7 @@ export class SchoolService {
       data: updateSchoolDto,
     });
     if (!updatedSchool) {
-      throw new HttpException('School not updated', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException('School not updated');
     }
     return sendResponseApi(
       HttpStatus.OK,
@@ -59,7 +65,7 @@ export class SchoolService {
       where: { id },
     });
     if (!deletedSchool) {
-      throw new HttpException('School not deleted', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException('School not deleted');
     }
     return sendResponseApi(
       HttpStatus.OK,
